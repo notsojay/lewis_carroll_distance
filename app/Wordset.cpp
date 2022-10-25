@@ -32,6 +32,17 @@ WordSet::WordSet(unsigned long long initialCapacity, unsigned evictionThreshold)
 	}
 }
 
+WordSet::WordSet(const WordSet& other):hashTbalecapacity(other.hashTbalecapacity), strCount(other.strCount), evictionThreshold(other.evictionThreshold)
+{
+	hashTable1 = new std::string[hashTbalecapacity];
+	hashTable2 = new std::string[hashTbalecapacity];
+	for(size_t i = 0; i < hashTbalecapacity; ++i)
+	{
+		hashTable1[i] = other.hashTable1[i];
+		hashTable2[i] = other.hashTable2[i];
+	}
+}
+
 WordSet::~WordSet()
 {
 	if(!hashTable1)
@@ -149,7 +160,7 @@ bool WordSet::isPrimeNum(const unsigned long long & num)
 	return true;
 }
 
-unsigned long WordSet::getNextPrimeNum(const unsigned long & currentPrimeNum)
+unsigned WordSet::getNextPrimeNum(const unsigned long & currentPrimeNum)
 {
 	unsigned result = currentPrimeNum * 2;
 	while(!isPrimeNum(result))

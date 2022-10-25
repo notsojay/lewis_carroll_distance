@@ -23,8 +23,10 @@ class WordSet
 public: 
 	explicit WordSet(unsigned long long initialCapacity, unsigned evictionThreshold = DEFAULT_EVICT_THRESHOLD);
 	
+	explicit WordSet(const WordSet& other);
+	
 	~WordSet();
-
+	
 	// adds the given string to the WordSet, so that any 
 	// future calls to contains(s) will return true.
 	// Note that we are not implementing remove in this

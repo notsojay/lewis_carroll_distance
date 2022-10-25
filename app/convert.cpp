@@ -29,7 +29,7 @@ void loadWordsIntoTable(WordSet & words, std::istream & in)
 std::vector< std::string > convert(const std::string & s1, const std::string & s2, const WordSet & words)
 {
 	if(!words.contains(s2) || words.getCount() == 0 || s1 == s2 || s1.size() != s2.size()) return {};
-	WordSet tempWords = words;
+	WordSet tempWords(words);
 	std::vector< std::string > ret;
 	std::unordered_map<std::string, std::string> paths;
 	std::queue<std::string> q;
