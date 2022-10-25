@@ -23,7 +23,7 @@ class WordSet
 public: 
 	explicit WordSet(unsigned long long initialCapacity, unsigned evictionThreshold = DEFAULT_EVICT_THRESHOLD);
 	
-	explicit WordSet(const WordSet& other);
+	//explicit WordSet(const WordSet& other);
 	
 	~WordSet();
 	
@@ -42,7 +42,7 @@ public:
 	// return how large the underlying array is.
 	unsigned getCapacity() const;
 	
-	void erase(const std::string & s);
+	//void erase(const std::string & s);
 
 private:
 	

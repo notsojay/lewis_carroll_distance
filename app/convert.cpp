@@ -29,9 +29,9 @@ void loadWordsIntoTable(WordSet & words, std::istream & in)
 std::vector< std::string > convert(const std::string & s1, const std::string & s2, const WordSet & words)
 {
 	if(!words.contains(s2) || words.getCount() == 0 || s1 == s2 || s1.size() != s2.size()) return {};
-	WordSet tempWords(words);
 	std::vector< std::string > ret;
 	std::unordered_map<std::string, std::string> paths;
+	std::unordered_set<std::string> visited;
 	std::queue<std::string> q;
 	int distance = 0;
 	q.push(s1);
@@ -59,11 +59,11 @@ std::vector< std::string > convert(const std::string & s1, const std::string & s
 						getPath(paths, ret, s2, distance);
 						return ret;
 					}
-					if(tempWords.contains(temp))
+					if(words.contains(temp) && visited.find(temp) == visited.end())
 					{
 						paths[temp] = currentStr;
 						q.push(temp);
-						tempWords.erase(temp);
+						visited.insert(temp);
 					}
 				}
 			}

@@ -32,16 +32,16 @@ WordSet::WordSet(unsigned long long initialCapacity, unsigned evictionThreshold)
 	}
 }
 
-WordSet::WordSet(const WordSet& other):hashTbalecapacity(other.hashTbalecapacity), strCount(other.strCount), evictionThreshold(other.evictionThreshold)
-{
-	hashTable1 = new std::string[hashTbalecapacity];
-	hashTable2 = new std::string[hashTbalecapacity];
-	for(size_t i = 0; i < hashTbalecapacity; ++i)
-	{
-		hashTable1[i] = other.hashTable1[i];
-		hashTable2[i] = other.hashTable2[i];
-	}
-}
+//WordSet::WordSet(const WordSet& other):hashTbalecapacity(other.hashTbalecapacity), strCount(other.strCount), evictionThreshold(other.evictionThreshold)
+//{
+//	hashTable1 = new std::string[hashTbalecapacity];
+//	hashTable2 = new std::string[hashTbalecapacity];
+//	for(size_t i = 0; i < hashTbalecapacity; ++i)
+//	{
+//		hashTable1[i] = other.hashTable1[i];
+//		hashTable2[i] = other.hashTable2[i];
+//	}
+//}
 
 WordSet::~WordSet()
 {
@@ -170,17 +170,17 @@ unsigned WordSet::getNextPrimeNum(const unsigned long & currentPrimeNum)
 	return result;
 }
 
-void WordSet::erase(const std::string & s)
-{
-	if(!contains(s)) return;
-	unsigned hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
-	if(hashTable1[hashVal] == s)
-	{
-		hashTable1[hashVal] = std::string();
-	}
-	hashVal = polynomialHashFunction(s, BASE_H2, hashTbalecapacity);
-	if(hashTable2[hashVal] == s)
-	{
-		hashTable2[hashVal] = std::string();
-	}
-}
+//void WordSet::erase(const std::string & s)
+//{
+//	if(!contains(s)) return;
+//	unsigned hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
+//	if(hashTable1[hashVal] == s)
+//	{
+//		hashTable1[hashVal] = std::string();
+//	}
+//	hashVal = polynomialHashFunction(s, BASE_H2, hashTbalecapacity);
+//	if(hashTable2[hashVal] == s)
+//	{
+//		hashTable2[hashVal] = std::string();
+//	}
+//}
