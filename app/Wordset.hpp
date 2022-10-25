@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <cmath>
 
 // You may assume, in writing this function, that the given
 // string consists solely of lower-case letters.
@@ -21,6 +22,7 @@ class WordSet
 {
 public: 
 	explicit WordSet(unsigned initialCapacity, unsigned evictionThreshold = DEFAULT_EVICT_THRESHOLD);
+	
 	~WordSet();
 
 	// adds the given string to the WordSet, so that any 
@@ -39,6 +41,20 @@ public:
 	unsigned getCapacity() const;
 
 private:
+	void insertHelper(const std::string & s, std::string* table1, std::string* table2, unsigned & currentCapacity);
+	
+	void resize(std::string* table1, std::string* table2, unsigned & currentCapacity);
+	
+	bool isPrimeNum(const unsigned & num);
+	
+	unsigned getNextPrimeNum(const unsigned & currentPrimeNum);
+	
+private:
+	std::string* hashTable1;
+	std::string* hashTable2;
+	unsigned hashTbalecapacity;
+	unsigned strCount;
+	unsigned evictionThreshold;
 	static constexpr unsigned BASE_H1 = 37;
 	static constexpr unsigned BASE_H2 = 41; 
 	// You may declare private functions and member variables here.
