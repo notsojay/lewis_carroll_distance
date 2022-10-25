@@ -39,21 +39,24 @@ public:
 
 	// return how large the underlying array is.
 	unsigned getCapacity() const;
+	
+	void erase(const std::string & s);
 
 private:
+	
 	void insertHelper(const std::string & s);
 	
 	void resize(std::string* table1, std::string* table2, unsigned prevCapacity);
 	
 	bool isPrimeNum(const unsigned long long & num);
 	
-	unsigned long getNextPrimeNum(const unsigned long & currentPrimeNum);
+	unsigned getNextPrimeNum(const unsigned long & currentPrimeNum);
 	
 private:
 	std::string* hashTable1;
 	std::string* hashTable2;
-	unsigned long long hashTbalecapacity;
-	unsigned long long strCount;
+	unsigned hashTbalecapacity;
+	unsigned strCount;
 	unsigned evictionThreshold;
 	static constexpr unsigned BASE_H1 = 37;
 	static constexpr unsigned BASE_H2 = 41; 

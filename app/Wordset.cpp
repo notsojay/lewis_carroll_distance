@@ -6,7 +6,7 @@
 // returns s, as a number in the given base, mod the given modulus
 unsigned polynomialHashFunction(const std::string & s, unsigned base, unsigned mod)
 {
-	unsigned long long hashVal = 0, size = s.size()-1;
+	unsigned hashVal = 0, size = s.size()-1;
 	for(const auto &i : s)
 	{
 		unsigned power = 1;
@@ -105,7 +105,7 @@ void WordSet::insertHelper(const std::string & s)
 
 bool WordSet::contains(const std::string & s) const
 {
-	unsigned long long hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
+	unsigned hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
 	if(hashTable1[hashVal] == s) return true;
 	hashVal = polynomialHashFunction(s, BASE_H2, hashTbalecapacity);
 	if(hashTable2[hashVal] == s) return true;
@@ -142,7 +142,7 @@ void WordSet::resize(std::string* table1, std::string* table2, unsigned prevCapa
 bool WordSet::isPrimeNum(const unsigned long long & num)
 {
 	auto squareRoot = std::sqrt(num);
-	for(unsigned long long i = 2; i <= squareRoot; ++i)
+	for(unsigned i = 2; i <= squareRoot; ++i)
 	{
 		if(num % i == 0) return false;
 	}
@@ -151,10 +151,25 @@ bool WordSet::isPrimeNum(const unsigned long long & num)
 
 unsigned long WordSet::getNextPrimeNum(const unsigned long & currentPrimeNum)
 {
-	unsigned long long result = currentPrimeNum * 2;
+	unsigned result = currentPrimeNum * 2;
 	while(!isPrimeNum(result))
 	{
 		result += 1;
 	}
 	return result;
+}
+
+void WordSet::erase(const std::string & s)
+{
+	if(!contains(s)) return;
+	unsigned hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
+	if(hashTable1[hashVal] == s)
+	{
+		hashTable1[hashVal] = std::string();
+	}
+	hashVal = polynomialHashFunction(s, BASE_H2, hashTbalecapacity);
+	if(hashTable2[hashVal] == s)
+	{
+		hashTable2[hashVal] = std::string();
+	}
 }
