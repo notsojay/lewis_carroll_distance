@@ -158,7 +158,7 @@ TEST(SampleTests, ChangesToGlasses)
 {
 	WordSet words(11);
 	std::string WORD_ONE = "changes";
-	std::string WORD_TWO = "glasses";
+	std::string WORD_TWO = ./r;
 	auto CORRECT_LENGTH = 48;
 
 	std::ifstream in("words.txt");
