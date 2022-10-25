@@ -5,6 +5,7 @@
 #include <queue>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 // You should not need to change this function.
 void loadWordsIntoTable(WordSet & words, std::istream & in)
@@ -30,6 +31,7 @@ std::vector< std::string > convert(const std::string & s1, const std::string & s
 	if(!words.contains(s2) || words.getCount() == 0 || s1 == s2 || s1.size() != s2.size()) return {};
 	std::vector< std::string > ret;
 	std::unordered_map<std::string, std::string> paths;
+	//std::unordered_set<std::string> dict;
 	std::queue<std::string> q;
 	int distance = 0;
 	q.push(s1);
@@ -53,11 +55,11 @@ std::vector< std::string > convert(const std::string & s1, const std::string & s
 					}
 					if(temp == s2)
 					{
-						paths[s2] = temp;
+						paths[temp] = currentStr;
 						getPath(paths, ret, s2, distance);
 						return ret;
 					}
-					if(!paths.count(temp))
+					if(words.contains(temp))
 					{
 						paths[temp] = currentStr;
 						q.push(temp);
@@ -71,7 +73,7 @@ std::vector< std::string > convert(const std::string & s1, const std::string & s
 
 void getPath(const std::unordered_map<std::string, std::string> & paths, std::vector< std::string > & ret, const std::string & s2, const int & distance)
 {
-	ret.resize(distance, "");
+	ret.resize(distance+1, "");
 	ret[distance] = s2;
 	for(int i = distance-1; i >= 0; --i)
 	{

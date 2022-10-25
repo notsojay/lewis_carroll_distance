@@ -1,21 +1,27 @@
 #include "Wordset.hpp"
 #include <string>
 #include <cmath>
+#include <iostream>
 
 // returns s, as a number in the given base, mod the given modulus
 unsigned polynomialHashFunction(const std::string & s, unsigned base, unsigned mod)
 {
-	unsigned hashVal = 0, size = s.size()-1;
+	unsigned long long hashVal = 0, size = s.size()-1;
 	for(const auto &i : s)
 	{
-		unsigned power = power = std::pow(base, size);
+		unsigned power = 1;
+		for(int i = 0; i < size; ++i)
+		{
+			power *= base;
+		}
 		hashVal = (hashVal + (i - 'a' + 1) * power) % mod;
 		--size;
 	}
+	hashVal %= mod;
 	return hashVal;
 }
 
-WordSet::WordSet(unsigned initialCapacity, unsigned evictionThreshold):hashTbalecapacity(initialCapacity), strCount(0), evictionThreshold(evictionThreshold)
+WordSet::WordSet(unsigned long long initialCapacity, unsigned evictionThreshold):hashTbalecapacity(initialCapacity), strCount(0), evictionThreshold(evictionThreshold)
 {
 	hashTable1 = new std::string[hashTbalecapacity];
 	hashTable2 = new std::string[hashTbalecapacity];
@@ -42,15 +48,64 @@ WordSet::~WordSet()
 
 void WordSet::insert(const std::string & s)
 {
-	if(contains(s)) return;
-	insertHelper(s, hashTable1, hashTable2, hashTbalecapacity);
+	insertHelper(s);
 	++strCount;
+}
+
+void WordSet::insertHelper(const std::string & s)
+{
+	if(contains(s)) return;
+	bool switcher = true;
+	std::string newStr = s;
+	for(int i = 0; i < evictionThreshold; ++i)
+	{
+		unsigned index1 = polynomialHashFunction(newStr, BASE_H1, hashTbalecapacity);
+		unsigned index2 = polynomialHashFunction(newStr, BASE_H2, hashTbalecapacity);
+		if(hashTable1[index1] == std::string())
+		{
+			hashTable1[index1] = newStr;
+			break;
+		}
+		else if(hashTable2[index2] == std::string())
+		{
+			hashTable2[index2] = newStr;
+			break;
+		}
+		if(switcher)
+		{
+			std::string temp = newStr;
+			newStr = hashTable1[index1];
+			hashTable1[index1] = temp;
+		}
+		else 
+		{
+			std::string temp = newStr;
+			newStr = hashTable2[index2];
+			hashTable2[index2] = temp;
+		}
+		switcher = !switcher;
+		if(i + 1 == evictionThreshold)
+		{
+			unsigned prevCapacity = hashTbalecapacity;
+			hashTbalecapacity = getNextPrimeNum(hashTbalecapacity);
+			std::string* table1 = hashTable1;
+			std::string* table2 = hashTable2;
+			hashTable1 = new std::string[hashTbalecapacity];
+			hashTable2 = new std::string[hashTbalecapacity];
+			resize(table1, table2, prevCapacity);
+			delete [] table1;
+			table1 = nullptr;
+			delete [] table2;
+			table2 = nullptr;
+			i = -1;
+		}
+	}
 }
 
 
 bool WordSet::contains(const std::string & s) const
 {
-	unsigned hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
+	unsigned long long hashVal = polynomialHashFunction(s, BASE_H1, hashTbalecapacity);
 	if(hashTable1[hashVal] == s) return true;
 	hashVal = polynomialHashFunction(s, BASE_H2, hashTbalecapacity);
 	if(hashTable2[hashVal] == s) return true;
@@ -69,89 +124,34 @@ unsigned WordSet::getCapacity() const
 	return hashTbalecapacity; // that isn't even a prime number!
 }
 
-void WordSet::insertHelper(const std::string & s, std::string* table1, std::string* table2, unsigned & currentCapacity)
+void WordSet::resize(std::string* table1, std::string* table2, unsigned prevCapacity)
 {
-	bool switcher = true;
-	std::string newStr = s;
-	for(int i = 0; i < evictionThreshold; ++i)
-	{
-		unsigned hashVal1 = polynomialHashFunction(newStr, BASE_H1, currentCapacity);
-		unsigned hashVal2 = polynomialHashFunction(newStr, BASE_H2, currentCapacity);
-		if(table1[hashVal1] == std::string())
-		{
-			table1[hashVal1] = newStr;
-			break;
-		}
-		else if(hashTable2[hashVal2] == std::string())
-		{
-			table2[hashVal2] = newStr;
-			break;
-		}
-		if(switcher)
-		{
-			std::string temp = newStr;
-			newStr = table1[hashVal1];
-			table1[hashVal1] = temp;
-		}
-		else 
-		{
-			std::string temp = newStr;
-			newStr = table2[hashVal2];
-			table2[hashVal2] = temp;
-		}
-		switcher = !switcher;
-		if(i + 1 == evictionThreshold)
-		{
-			resize(table1, table2, currentCapacity);
-			i = -1;
-		}
-	}
-}
-
-void WordSet::resize(std::string* table1, std::string* table2, unsigned & currentCapacity)
-{
-	unsigned newSize = getNextPrimeNum(currentCapacity);
-	std::string* newHashTable1 = new std::string[newSize];
-	std::string* newHashTable2 = new std::string[newSize];
-	for(size_t i = 0; i < hashTbalecapacity; ++i)
-	{
-		newHashTable1[i] = std::string();
-		newHashTable2[i] = std::string();
-	}
-	for(unsigned i = 0; i < hashTbalecapacity; ++i)
+	for(size_t i = 0; i < prevCapacity; ++i)
 	{
 		if(table1[i] != std::string())
 		{
-			insertHelper(table1[i], newHashTable1, newHashTable2, newSize);
+			insertHelper(table1[i]);
 		}
 		if(table2[i] != std::string())
 		{
-			insertHelper(table2[i], newHashTable1, newHashTable2, newSize);
+			insertHelper(table2[i]);
 		}
 	}
-	currentCapacity = newSize;
-	std::swap(table1, newHashTable1);
-	std::swap(table2, newHashTable2);
-	delete [] newHashTable1;
-	newHashTable1 = nullptr;
-	delete [] newHashTable2;
-	newHashTable2 = nullptr;
 }
 
-bool WordSet::isPrimeNum(const unsigned & num)
+bool WordSet::isPrimeNum(const unsigned long long & num)
 {
 	auto squareRoot = std::sqrt(num);
-	for(unsigned i = 2; i <= squareRoot; ++i)
+	for(unsigned long long i = 2; i <= squareRoot; ++i)
 	{
 		if(num % i == 0) return false;
 	}
 	return true;
 }
 
-unsigned WordSet::getNextPrimeNum(const unsigned & currentPrimeNum)
+unsigned long WordSet::getNextPrimeNum(const unsigned long & currentPrimeNum)
 {
-	if(currentPrimeNum < 2) return 2;
-	unsigned result = currentPrimeNum * 2;
+	unsigned long long result = currentPrimeNum * 2;
 	while(!isPrimeNum(result))
 	{
 		result += 1;
