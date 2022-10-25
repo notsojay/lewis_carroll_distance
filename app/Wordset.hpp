@@ -21,7 +21,7 @@ unsigned polynomialHashFunction(const std::string & s, unsigned base, unsigned m
 class WordSet
 {
 public: 
-	explicit WordSet(unsigned long long initialCapacity, unsigned evictionThreshold = DEFAULT_EVICT_THRESHOLD);
+	explicit WordSet(unsigned initialCapacity, unsigned evictionThreshold = DEFAULT_EVICT_THRESHOLD);
 	
 	//explicit WordSet(const WordSet& other);
 	
@@ -50,9 +50,9 @@ private:
 	
 	void resize(std::string* table1, std::string* table2, unsigned prevCapacity);
 	
-	bool isPrimeNum(const unsigned long long & num);
+	bool isPrimeNum(const unsigned & num);
 	
-	unsigned getNextPrimeNum(const unsigned long & currentPrimeNum);
+	unsigned getNextPrimeNum(const unsigned & currentPrimeNum);
 	
 private:
 	std::string* hashTable1;

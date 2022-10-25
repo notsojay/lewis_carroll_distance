@@ -76,6 +76,62 @@ TEST(ResizeTest, Tab3)
 	EXPECT_EQ(ws.getCapacity(), 23);
 }
 
+TEST(ConvertWords, StrsSizeDiff)
+{
+	WordSet words(11);
+	std::ifstream in("words.txt");
+	loadWordsIntoTable(words, in);
+		
+	std::vector< std::string > r  = convert("banking", "ant", words);
+		
+		// this was a success if r was a valid conversion of length 2.
+	std::ifstream in2("words.txt");
+	EXPECT_EQ(r.size(), 0);
+	EXPECT_TRUE(  validConversion(r, "banking", "ant", in2) );
+}
+
+TEST(ConvertWords, StrsNotInWords)
+{
+	WordSet words(11);
+	std::ifstream in("words.txt");
+	loadWordsIntoTable(words, in);
+		
+	std::vector< std::string > r  = convert("jiahao", "yunhui", words);
+		
+		// this was a success if r was a valid conversion of length 2.
+	std::ifstream in2("words.txt");
+	EXPECT_EQ(r.size(), 0);
+	EXPECT_TRUE(  validConversion(r, "jiahao", "yunhui", in2) );
+}
+
+TEST(ConvertWords, EmptyStr)
+{
+	WordSet words(11);
+	std::ifstream in("words.txt");
+	loadWordsIntoTable(words, in);
+		
+	std::vector< std::string > r  = convert("", "", words);
+		
+		// this was a success if r was a valid conversion of length 2.
+	std::ifstream in2("words.txt");
+	EXPECT_EQ(r.size(), 0);
+	EXPECT_TRUE(  validConversion(r, "", "", in2) );
+}
+
+TEST(ConvertWords, EatToEat)
+{
+	WordSet words(11);
+	std::ifstream in("words.txt");
+	loadWordsIntoTable(words, in);
+		
+	std::vector< std::string > r  = convert("eat", "eat", words);
+		
+		// this was a success if r was a valid conversion of length 2.
+	std::ifstream in2("words.txt");
+	EXPECT_EQ(r.size(), 1);
+	EXPECT_TRUE(  validConversion(r, "eat", "eat", in2) );
+}
+
 TEST(ConvertWords, AntToArt)
 {
 	WordSet words(11);

@@ -28,7 +28,8 @@ void loadWordsIntoTable(WordSet & words, std::istream & in)
 // You probably want to change this function.
 std::vector< std::string > convert(const std::string & s1, const std::string & s2, const WordSet & words)
 {
-	if(!words.contains(s2) || words.getCount() == 0 || s1 == s2 || s1.size() != s2.size()) return {};
+	if(!words.contains(s1) || !words.contains(s2) || words.getCount() == 0 || s1.size() != s2.size() || s1.empty() || s2.empty()) return {};
+	if(s1 == s2) return {s1};
 	std::vector< std::string > ret;
 	std::unordered_map<std::string, std::string> paths;
 	std::unordered_set<std::string> visited;
