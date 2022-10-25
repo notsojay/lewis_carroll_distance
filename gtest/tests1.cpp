@@ -87,7 +87,7 @@ TEST(ConvertWords, StrsSizeDiff)
 		// this was a success if r was a valid conversion of length 2.
 	std::ifstream in2("words.txt");
 	EXPECT_EQ(r.size(), 0);
-	EXPECT_TRUE(  validConversion(r, "banking", "ant", in2) );
+	EXPECT_FALSE(  validConversion(r, "banking", "ant", in2) );
 }
 
 TEST(ConvertWords, StrsNotInWords)
@@ -101,7 +101,7 @@ TEST(ConvertWords, StrsNotInWords)
 		// this was a success if r was a valid conversion of length 2.
 	std::ifstream in2("words.txt");
 	EXPECT_EQ(r.size(), 0);
-	EXPECT_TRUE(  validConversion(r, "jiahao", "yunhui", in2) );
+	EXPECT_FALSE(  validConversion(r, "jiahao", "yunhui", in2) );
 }
 
 TEST(ConvertWords, EmptyStr)
@@ -115,7 +115,7 @@ TEST(ConvertWords, EmptyStr)
 		// this was a success if r was a valid conversion of length 2.
 	std::ifstream in2("words.txt");
 	EXPECT_EQ(r.size(), 0);
-	EXPECT_TRUE(  validConversion(r, "", "", in2) );
+	EXPECT_FALSE(  validConversion(r, "", "", in2) );
 }
 
 TEST(ConvertWords, EatToEat)
