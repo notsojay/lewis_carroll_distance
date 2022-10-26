@@ -17,7 +17,6 @@ unsigned polynomialHashFunction(const std::string & s, unsigned base, unsigned m
 		hashVal = (hashVal + (i - 'a' + 1) * power) % mod;
 		--size;
 	}
-	hashVal %= mod;
 	return hashVal;
 }
 
